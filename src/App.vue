@@ -26,14 +26,14 @@ export default {
   methods:{
        listData(data){
         this.ObjData = data;
-        //console.log(this.ObjData);
+      
        }
   },
   components: {
    AccessLevels,
    AccessLevelList
   },
-  
+ 
 }
 </script>
 

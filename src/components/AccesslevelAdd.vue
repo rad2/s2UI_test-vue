@@ -26,8 +26,8 @@
 <script>
 // eslint-disable-next-line
 /* eslint-disable */
-import Readers from './Readers'
-
+import Readers from './Readers';
+import axios from 'axios';
 export default {
   name: 'Access-Levels',
   props:['sendAlinfo'],
@@ -51,7 +51,7 @@ export default {
           return lastEl.id++;
         },
         save: function(){
-            const al_Obj= {
+            let al_Obj= {
                     id:this.incrementId(),
                     name:this.sendAlinfo.alname,
                     readerId:this.r_id,
@@ -62,6 +62,14 @@ export default {
         },
         
     },
+    
+    created(){
+        axios.get('src/assets/data/accesslevels.json')
+                 .then((res) => {this.accesslevels = res.data;})
+                 .catch(error => console.error(error));
+
+             
+    }
 }
 </script>
 

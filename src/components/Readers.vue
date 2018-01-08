@@ -3,11 +3,10 @@
    <div id="readers">
     
  
-      <select v-model="selected" @change="getReaderId" class="form-control input-sm">
-       <option value="0" selected >All Reader Groups</option>
-       <option v-for="r in readers" :key="r.id" :value="r.id">{{r.name}}</option>
+      <select  v-model="readerId" @change="getReaderId" class="form-control input-sm">
+       <option value=0 selected>All Reader Groups</option>
+       <option v-for="r in readers" :key="r.id" :value="r.id" >{{r.name}}</option>
       </select>  
-		{{readerId}}
 		</div>	
   </div>
 </template>
@@ -22,7 +21,7 @@ export default {
   data () {
     return {
 			lbl: 'Reader(s)',
-			selected: 0,
+			selected:0,
       readers:[]
 
     }
@@ -39,7 +38,12 @@ export default {
 							})
 							.catch(error => console.error(error));
 	},
-	
+	computed:{
+		initrdId:function(){
+       return this.readerId=0;
+		}
+		 
+	}
 }
 </script>
 

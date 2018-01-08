@@ -65,8 +65,7 @@ methods:{
                  .catch(error =>console.error(error));
    }, 
    list(a){
-       //console.log(a)
-     this.$emit("showALname", a)
+       this.$emit("showALname", a)
    }
 
 },
