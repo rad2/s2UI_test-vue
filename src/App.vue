@@ -2,7 +2,7 @@
 
   <div id="app">
     <div id="al_detail">
-      <AccessLevel-List @showALname='listData'/>
+      <AccessLevel-List @showALname='listData' />
     </div>
     <div id="al_frm"> 
        <Access-Levels :sendAlinfo='ObjData'/>
@@ -26,6 +26,7 @@ export default {
   methods:{
        listData(data){
         this.ObjData = data;
+        //console.log(this.ObjData);
       
        }
   },

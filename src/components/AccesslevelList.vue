@@ -8,7 +8,7 @@
                 <tr style="background:grey">
                     <th colspan="3">
                         <span class="glyphicon glyphicon-plus special"></span> 
-                       <input type="search" placeholder="Spotlight Search" class="form-control" v-model="search">
+                       <input type="search" placeholder="Spotlight Search" class="form-control" name="search" v-model="search">
                     </th>    
                  </tr>       
                 <tr>
@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
                 <tr v-for='a in almap' :key="a.id"  @click="list(a)">
-                   <td class="row">{{a.alname}}</td>
+                   <td class="row">{{a.name}}</td>
                     <td class="row">{{a.rdtypename}}</td>
                     <td class="row">{{a.rdname}}</td>
                 </tr>
@@ -41,7 +41,6 @@ export default {
       return{
           lbl:'AccessLevels',
           columns:['Name','Redaer Type','Reader(s)'],
-          al_map:[],
           al:[],
           rd:[],
           rdtype:[],
@@ -65,56 +64,49 @@ methods:{
                  .catch(error =>console.error(error));
    }, 
    list(a){
+       //console.log(a);
        this.$emit("showALname", a)
    }
 
 },
-created(){
+mounted(){
   this.alfunc();
   
 },
 computed:{
     
    almap: function(){
+       var al_map=[];
       var als =[];
       var vm = this;
-       
-      this.al.forEach(function(alObj){
-        vm.rd.forEach(function(rdObj){     
-          if(alObj.readerId === rdObj.id){
-            var alsObj={};
-            alsObj.al_id = alObj.id;
-            alsObj.alname = alObj.name;
-            alsObj.aldesc = alObj.description;
-            alsObj.rdId = rdObj.id;
-            alsObj.rdname = rdObj.name;
-            alsObj.rdtypeId = rdObj.typeId;
-            //return alsObj;
-            vm.al_map.push(alsObj);
-          }
+       this.al.map(function(alObj){
+        vm.rd.find(function(rdObj){   
+           if( alObj.readerId === rdObj.id){
+               alObj.rdname = rdObj.name;
+               alObj.rdtypeId = rdObj.typeId;
              
-             //console.log(vm.al_map);
-        }) 
-            
-         
+              al_map.push(alObj);
+          }
+        })   
+           //console.log(al_map);
       })
-      
-      //})
-  this.al_map.forEach(function(item){
-       vm.rdtype.find(function(rdtypeObj){
+
+       al_map.forEach(function(item){
+        vm.rdtype.find(function(rdtypeObj){
            if(item.rdtypeId === rdtypeObj.id){
-           item.rdtypename= rdtypeObj.name;
-             als.push(item);
+              item.rdtypename= rdtypeObj.name;
+             
+              als.push(item);
            }
        }) 
        
     })   
      return als.filter(function(item){
          var searchRegex = new RegExp(vm.search,'i')
-         return searchRegex.test(item.alname) ||
+         return searchRegex.test(item.name) ||
                  searchRegex.test(item.rdname) ||
                  searchRegex.test(item.rdtypename) 
- })
+        })
    }  
 }
 }

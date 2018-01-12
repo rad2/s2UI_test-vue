@@ -3,8 +3,8 @@
    <div id="readers">
     
  
-      <select  v-model="readerId" @change="getReaderId" class="form-control input-sm">
-       <option value=0 selected>All Reader Groups</option>
+      <select   v-model="initrdId" @change="setReaderId($event.target.value)" class="form-control input-sm">
+       <option value="0" selected>All Reader Groups</option>
        <option v-for="r in readers" :key="r.id" :value="r.id" >{{r.name}}</option>
       </select>  
 		</div>	
@@ -21,14 +21,13 @@ export default {
   data () {
     return {
 			lbl: 'Reader(s)',
-			selected:0,
       readers:[]
-
+       
     }
   },
   methods:{
-      getReaderId(){
-				this.$emit('setReaderId',this.selected);
+      setReaderId(val){
+				this.$emit('setReaderId', val);
 			}
 	},
 	created(){
@@ -37,12 +36,17 @@ export default {
 								this.readers = res.data;
 							})
 							.catch(error => console.error(error));
+							
 	},
 	computed:{
-		initrdId:function(){
-       return this.readerId=0;
-		}
-		 
+		initrdId:		 {
+			 get:function(){
+				 return  this.readerId || 0;
+			 },
+			 set:function(value){
+         this.setReaderId(value);
+			 }
+		 }
 	}
 }
 </script>
