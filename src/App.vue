@@ -2,7 +2,7 @@
 
   <div id="app">
     <div id="al_detail">
-      <AccessLevel-List @showALname='listData' :updateAlinfo='alObjdata'/>
+      <AccessLevel-List @showALname='listData' :updatedAlinfo='alObjdata'/>
     </div>
     <div id="al_frm"> 
        <Access-Levels :sendAlinfo='ObjData' @sendALObj='receivedAlObj' />
