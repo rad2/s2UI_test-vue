@@ -6,11 +6,11 @@
                   
                         <label class="control-label " for="al_name">{{lbl_name}}:</label>
                        
-                        <input type="text" id="alname"  class="form-control input-sm" v-model="sendAlinfo.name" >           
+                        <input type="text" id="alname"  class="form-control input-sm" v-model.lazy="sendAlinfo.alname" >           
                  
                         <label class="control-label " for="al_desc">{{lbl_description}}:</label>
                              
-                        <textarea row="100" col="140" class="form-control" id="al_desc" name="aldesc" v-model.lazy="sendAlinfo.description"></textarea>
+                        <textarea row="100" col="140" class="form-control" id="al_desc" name="aldesc" v-model.lazy="sendAlinfo.aldesc"></textarea>
                         <label class="control-label " for="rd">Reader(s):</label>
                          <p id="rd">
                              <Readers @setReaderId="r_id=$event" :readername='sendAlinfo.rdname' :readerId ='sendAlinfo.readerId'/>
@@ -19,6 +19,7 @@
                            <button id="save" @click="update()">Save</button>&nbsp;<button id="cancel">Cancel</button>
                          </div>
                 </form>
+
    </div>
 </template>
 
@@ -53,16 +54,15 @@ export default {
         },
         update: function(){
             var vm = this;
-          return this.accesslevels.find(function(alObj){
-              if (alObj.id === vm.sendAlinfo.id){
-                  alObj.description = vm.sendAlinfo.description;
-                  alObj.name = vm.sendAlinfo.name;
-                  alObj.readerId = vm.r_id;
+          //  console.log("SendALinfo" + JSON.stringify(this.sendAlinfo));
+          let al= this.accesslevels.find(a => a.id === vm.sendAlinfo.alId) ||{}
+                  al.name = vm.sendAlinfo.alname;
+                  al.description = vm.sendAlinfo.aldesc;
+                  al.newreaderId = parseInt(vm.r_id);
+                  al.readername= vm.sendAlinfo.rdname;
 
-                  this.$emit('sendReaderId', vm.r_id);
-              } 
-          })
-          
+                  this.$emit('sendALObj', al);
+          //console.log(al);
         },
         save: function(){
             let al_Obj= {

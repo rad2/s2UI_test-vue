@@ -2,10 +2,10 @@
 
   <div id="app">
     <div id="al_detail">
-      <AccessLevel-List @showALname='listData' />
+      <AccessLevel-List @showALname='listData' :updateAlinfo='alObjdata'/>
     </div>
     <div id="al_frm"> 
-       <Access-Levels :sendAlinfo='ObjData'/>
+       <Access-Levels :sendAlinfo='ObjData' @sendALObj='receivedAlObj' />
      </div>  
   </div>
 </template>
@@ -20,14 +20,19 @@ export default {
   name: 'app',
   data(){
      return{
-       ObjData:''
+       ObjData:'',
+       alObjdata:''
      }
   },
   methods:{
        listData(data){
         this.ObjData = data;
-        //console.log(this.ObjData);
+       // console.log(this.ObjData);
       
+       },
+       receivedAlObj(data){
+         this. alObjdata = data;
+
        }
   },
   components: {

@@ -17,9 +17,9 @@
                 </thead>
                 <tbody>
                 <tr v-for='a in almap' :key="a.id"  @click="list(a)">
-                   <td class="row">{{a.name}}</td>
+                   <td class="row">{{a.alname}}</td>
                     <td class="row">{{a.rdtypename}}</td>
-                    <td class="row">{{a.rdname}}</td>
+                    <td class="row">{{a.rdname}}<button @click="updateAl"> update</button></td>
                 </tr>
                 </tbody>
             </table>      
@@ -35,15 +35,17 @@ import axios from 'axios';
 import lodash from 'lodash';
 export default {
   name: 'AccessLevel-List',
-
+  props:['updatedAlinfo'],
   data() {
         
       return{
           lbl:'AccessLevels',
           columns:['Name','Redaer Type','Reader(s)'],
           al:[],
+          als:[],
           rd:[],
           rdtype:[],
+         // updatedAlinfo:'',
           search:''
           
       }
@@ -62,46 +64,75 @@ methods:{
             axios.get('src/assets/data/readertype.json')
                  .then((res) =>{ this.rdtype = res.data;})
                  .catch(error =>console.error(error));
+
+                 
    }, 
    list(a){
        //console.log(a);
-       this.$emit("showALname", a)
+        this.$emit("showALname", a)
+   },
+   updateAl(){
+     // console.log(this.updatedAlinfo);
+     //this.updatedAlinfo = data;
+
+     console.log(this.updatedAlinfo);
+       let al = this.als.find(a => a.alId === this.updatedAlinfo.id)
+                 al.alname = this.updatedAlinfo.name;
+                 al.aldesc = this.updatedAlinfo.description;
+                 al.readerId = this.updatedAlinfo.newreaderId;   
+
+      let reader = this.rd.find(r => r.id === this.updatedAlinfo.newreaderId) || {}
+                 al.rdname = reader.name;
+
    }
 
 },
 mounted(){
   this.alfunc();
   
+  
 },
 computed:{
     
    almap: function(){
-       var al_map=[];
-      var als =[];
+      //var als =[];
       var vm = this;
-       this.al.map(function(alObj){
-        vm.rd.find(function(rdObj){   
-           if( alObj.readerId === rdObj.id){
-               alObj.rdname = rdObj.name;
-               alObj.rdtypeId = rdObj.typeId;
-             
-              al_map.push(alObj);
-          }
-        })   
-           //console.log(al_map);
-      })
-
-       al_map.forEach(function(item){
-        vm.rdtype.find(function(rdtypeObj){
-           if(item.rdtypeId === rdtypeObj.id){
-              item.rdtypename= rdtypeObj.name;
-             
-              als.push(item);
-           }
-       }) 
        
-    })   
-     return als.filter(function(item){
+      this.als = this.al.map( a => {
+          let reader = vm.rd.find( r => r.id  ===  a.readerId ) || {}
+          let readerType = vm.rdtype.find( rt => rt.id === reader.typeId) || {}
+
+          return {
+              alId:a.id,
+              alname:a.name,
+              aldesc:a.description,
+              readerId:reader.id,
+              rdname:reader.name,
+              rdtypename:readerType.name
+          }
+      }) 
+      
+      /*                               this.al.map(function(alObj){
+                                        vm.rd.find(function(rdObj){   
+                                        if( alObj.readerId === rdObj.id){
+                                            alObj.rdname = rdObj.name;
+                                            alObj.rdtypeId = rdObj.typeId;
+                                            
+                                            al_map.push(alObj);
+                                        }
+                                        })   
+                                        //console.log(al_map);
+                                    })
+
+                                    al_map.forEach(function(item){
+                                        vm.rdtype.find(function(rdtypeObj){
+                                        if(item.rdtypeId === rdtypeObj.id){
+                                            item.rdtypename= rdtypeObj.name;
+                                            als.push(item);
+                                            }
+                                        }) 
+                                    })    */
+     return this.als.filter((item) => {
          var searchRegex = new RegExp(vm.search,'i')
          return searchRegex.test(item.name) ||
                  searchRegex.test(item.rdname) ||
