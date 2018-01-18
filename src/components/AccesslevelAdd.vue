@@ -62,7 +62,7 @@ export default {
                   al.readername= vm.sendAlinfo.rdname;
 
                   this.$emit('sendALObj', al);
-          //console.log(al);
+          console.log(al);
         },
         save: function(){
             let al_Obj= {

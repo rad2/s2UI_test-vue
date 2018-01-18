@@ -21,9 +21,12 @@ export default {
   data(){
      return{
        ObjData:'',
-       alObjdata:''
+       alObjdata:'',
+       als:[],
+       rd:[]
      }
   },
+  
   methods:{
        listData(data){
         this.ObjData = data;
@@ -31,8 +34,7 @@ export default {
       
        },
        receivedAlObj(data){
-         this. alObjdata = data;
-
+         this.alObjdata = data;
        }
   },
   components: {

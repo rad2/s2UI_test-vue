@@ -75,8 +75,8 @@ methods:{
      // console.log(this.updatedAlinfo);
      //this.updatedAlinfo = data;
 
-     console.log(this.updatedAlinfo);
-       let al = this.als.find(a => a.alId === this.updatedAlinfo.id)
+     //console.log(this.updatedAlinfo);
+       let al = this.als.find(a => a.alId === this.updatedAlinfo.id) || {}
                  al.alname = this.updatedAlinfo.name;
                  al.aldesc = this.updatedAlinfo.description;
                  al.readerId = this.updatedAlinfo.newreaderId;   
@@ -97,7 +97,6 @@ computed:{
    almap: function(){
       //var als =[];
       var vm = this;
-       
       this.als = this.al.map( a => {
           let reader = vm.rd.find( r => r.id  ===  a.readerId ) || {}
           let readerType = vm.rdtype.find( rt => rt.id === reader.typeId) || {}
